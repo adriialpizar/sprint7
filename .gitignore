@@ -206,7 +206,7 @@ tempCodeRunnerFile.py
 # Ruff stuff:
 .ruff_cache/
 
-# PyPI configuration file
+# PyPI confuration file
 .pypirc
 
 # Marimo
@@ -216,3 +216,4 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+vehicles_env/
