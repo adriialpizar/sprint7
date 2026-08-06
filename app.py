@@ -106,6 +106,35 @@ def main() -> None:
     )
 
     st.markdown("---")
+    st.header("Exploración rápida")
+    st.write("Selecciona las casillas para mostrar las visualizaciones deseadas.")
+
+    show_histogram = st.checkbox("Mostrar histograma de precios", value=False)
+    show_scatter = st.checkbox("Mostrar gráfico de dispersión", value=False)
+
+    if show_histogram:
+        fig_histogram = px.histogram(
+            filtered,
+            x="price",
+            nbins=35,
+            title="Histograma de precios",
+            labels={"price": "Precio (USD)"},
+        )
+        fig_histogram.update_layout(yaxis_title="Cantidad")
+        st.plotly_chart(fig_histogram, use_container_width=True)
+
+    if show_scatter:
+        fig_scatter = px.scatter(
+            filtered,
+            x="model_year",
+            y="price",
+            color="fuel",
+            hover_data=["model", "odometer", "condition"],
+            title="Precio vs Año del modelo",
+            labels={"model_year": "Año del modelo", "price": "Precio (USD)"},
+        )
+        st.plotly_chart(fig_scatter, use_container_width=True)
+
     st.markdown("### Visualizaciones")
 
     if len(filtered) == 0:
@@ -121,11 +150,14 @@ def main() -> None:
     )
     fig_price.update_layout(yaxis_title="Cantidad")
 
+    type_counts = (
+        filtered["type"].value_counts().rename_axis("Tipo de vehículo").reset_index(name="Cantidad")
+    )
     fig_type = px.bar(
-        filtered["type"].value_counts().reset_index(),
-        x="index",
-        y="type",
-        labels={"index": "Tipo de vehículo", "type": "Cantidad"},
+        type_counts,
+        x="Tipo de vehículo",
+        y="Cantidad",
+        labels={"Tipo de vehículo": "Tipo de vehículo", "Cantidad": "Cantidad"},
         title="Cantidad de vehículos por tipo",
     )
 
